@@ -1,6 +1,7 @@
 package com.sathvi.flixter.adapters;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,22 +52,31 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>{
 
         TextView tvTitle;
         TextView tvOverview;
-        ImageView ivPoster; //constraint layout?
+        ImageView ivPoster; //
 
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTitle = itemView.findViewById(R.id.tvTitle);
+            tvTitle =  itemView.findViewById(R.id.tvTitle);
             tvOverview = itemView.findViewById(R.id.tvOverview);
-            ivPoster = itemView.findViewById(R.id.ivPoster);
+            ivPoster =  itemView.findViewById(R.id.ivPoster);
 
         }
 
         public void bind(Movie movie) {
             tvTitle.setText(movie.getTitle());
             tvOverview.setText(movie.getOverView());
-            Glide.with(context).load(movie.getPosterPath()).into(ivPoster);
+            String imageUrl;
+            //if phone in landscape --> backdrop
+            if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                imageUrl = movie.getBackdropPath();
+            }
+            else {
+                imageUrl = movie.getPosterPath();
+            }
+            // else default - poster path
+            Glide.with(context).load(imageUrl).into(ivPoster);
         }
     }
 }
